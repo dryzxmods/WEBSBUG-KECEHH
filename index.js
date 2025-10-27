@@ -140,38 +140,33 @@ ${bottom}
 </blockquote>`;
 }
 
-const makeStatus = (number, status) => makeBox("ＳＴＡＴＵＳ", [
-  `Ｎｕｍｅｒｏ : ${number}`,
-  `Ｅｓｔａｄｏ : ${status.toUpperCase()}`
-]);
+const saveActive = (botNumber) => {
+  const list = fs.existsSync(file_session) ? JSON.parse(fs.readFileSync(file_session)) : [];
+  if (!list.includes(botNumber)) {
+    list.push(botNumber);
+    fs.writeFileSync(file_session, JSON.stringify(list));
+  }
+};
 
-const makeCode = (number, code) => ({
-  text: makeBox("ＳＴＡＴＵＳ ＰＡＩＲ", [
-    `Ｎｕｍｅｒｏ : ${number}`,
-    `Ｃｏ́ｄｉｇｏ : ${code}`
-  ]),
-  parse_mode: "HTML"
-});
+const sessionPath = (botNumber) => {
+  const dir = path.join(sessions_dir, `device${botNumber}`);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  return dir;
+};
 
 const initializeWhatsAppConnections = async () => {
   if (!fs.existsSync(file_session)) return;
   const activeNumbers = JSON.parse(fs.readFileSync(file_session));
-  
-  console.log(chalk.blue(`
-╔════════════════════════════╗
-║      SESSÕES ATIVAS DO WA
-╠════════════════════════════╣
-║  QUANTIDADE : ${activeNumbers.length}
-╚════════════════════════════╝`));
+  console.log(`Found ${activeNumbers.length} active WhatsApp sessions`);
 
-  for (const BotNumber of activeNumbers) {
-    console.log(chalk.green(`Menghubungkan: ${BotNumber}`));
-    const sessionDir = sessionPath(BotNumber);
+  for (const botNumber of activeNumbers) {
+    console.log(`Connecting WhatsApp: ${botNumber}`);
+    const sessionDir = sessionPath(botNumber);
     const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
 
     sock = makeWASocket({
       auth: state,
-      printQRInTerminal: false,
+      printQRInTerminal: true,
       logger: pino({ level: "silent" }),
       defaultQueryTimeoutMs: undefined,
     });
@@ -179,13 +174,13 @@ const initializeWhatsAppConnections = async () => {
     await new Promise((resolve, reject) => {
       sock.ev.on("connection.update", async ({ connection, lastDisconnect }) => {
         if (connection === "open") {
-          console.log(`Bot ${BotNumber} terhubung!`);
-          sessions.set(BotNumber, sock);
+          console.log(`Bot ${botNumber} connected!`);
+          sessions.set(botNumber, sock);
           return resolve();
         }
         if (connection === "close") {
-          const shouldReconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
-          return shouldReconnect ? await initializeWhatsAppConnections() : reject(new Error("Koneksi ditutup"));
+          const reconnect = lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut;
+          reconnect ? await initializeWhatsAppConnections() : reject(new Error("Koneksi ditutup"));
         }
       });
       sock.ev.on("creds.update", saveCreds);
@@ -193,19 +188,25 @@ const initializeWhatsAppConnections = async () => {
   }
 };
 
-const connectToWhatsApp = async (BotNumber, chatId, ctx) => {
-  const sessionDir = sessionPath(BotNumber);
+const connectToWhatsApp = async (botNumber, chatId, ctx) => {
+  const sessionDir = sessionPath(botNumber);
   const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
 
-  let statusMessage = await ctx.reply(`Pareando com o número ${BotNumber}...`, { parse_mode: "HTML" });
+  let statusMessage = await ctx.reply(`pairing with number *${botNumber}*...`, {
+    parse_mode: "Markdown"
+  });
 
   const editStatus = async (text) => {
     try {
-      await ctx.telegram.editMessageText(chatId, statusMessage.message_id, null, text, { parse_mode: "HTML" });
+      await ctx.telegram.editMessageText(chatId, statusMessage.message_id, null, text, {
+        parse_mode: "Markdown"
+      });
     } catch (e) {
-      console.error("Falha ao editar mensagem:", e.message);
+      console.error("Error:", e.message);
     }
   };
+
+  let paired = false;
 
   sock = makeWASocket({
     auth: state,
@@ -214,44 +215,37 @@ const connectToWhatsApp = async (BotNumber, chatId, ctx) => {
     defaultQueryTimeoutMs: undefined,
   });
 
-  let isConnected = false;
-
   sock.ev.on("connection.update", async ({ connection, lastDisconnect }) => {
+    if (connection === "connecting") {
+      if (!fs.existsSync(`${sessionDir}/creds.json`)) {
+        setTimeout(async () => {
+          try {
+            const code = await sock.requestPairingCode(botNumber);
+            const formatted = code.match(/.{1,4}/g)?.join("-") || code;
+            await editStatus(makeCode(botNumber, formatted));
+          } catch (err) {
+            console.error("Error requesting code:", err);
+            await editStatus(makeStatus(botNumber, `❗ ${err.message}`));
+          }
+        }, 3000);
+      }
+    }
+
+    if (connection === "open" && !paired) {
+      paired = true;
+      sessions.set(botNumber, sock);
+      saveActive(botNumber);
+      await editStatus(makeStatus(botNumber, "✅ Connected successfully."));
+    }
+
     if (connection === "close") {
       const code = lastDisconnect?.error?.output?.statusCode;
-      if (code >= 500 && code < 600) {
-        await editStatus(makeStatus(BotNumber, "Reconectando..."));
-        return await connectToWhatsApp(BotNumber, chatId, ctx);
-      }
-
-      if (!isConnected) {
-        await editStatus(makeStatus(BotNumber, "✗ Falha na conexão."));
-        return fs.rmSync(sessionDir, { recursive: true, force: true });
-      }
-    }
-
-    if (connection === "open") {
-      isConnected = true;
-      sessions.set(BotNumber, sock);
-      saveActive(BotNumber);
-      return await editStatus(makeStatus(BotNumber, "✓ Conectado com sucesso."));
-    }
-
-    if (connection === "connecting") {
-      await new Promise(r => setTimeout(r, 1000));
-      try {
-        if (!fs.existsSync(`${sessionDir}/creds.json`)) {
-          const code = await sock.requestPairingCode(BotNumber, "XATHENA1");
-          const formatted = code.match(/.{1,4}/g)?.join("-") || code;
-          await ctx.telegram.editMessageText(chatId, statusMessage.message_id, null, 
-            makeCode(BotNumber, formatted).text, {
-              parse_mode: "HTML",
-              reply_markup: makeCode(BotNumber, formatted).reply_markup
-            });
-        }
-      } catch (err) {
-        console.error("Erro ao solicitar código:", err);
-        await editStatus(makeStatus(BotNumber, `❗ ${err.message}`));
+      if (code !== DisconnectReason.loggedOut && code >= 500) {
+        console.log("Reconnect diperlukan untuk", botNumber);
+        setTimeout(() => connectToWhatsApp(botNumber, chatId, ctx), 2000);
+      } else {
+        await editStatus(makeStatus(botNumber, "❌ Failed to connect."));
+        fs.rmSync(sessionDir, { recursive: true, force: true });
       }
     }
   });
@@ -259,6 +253,12 @@ const connectToWhatsApp = async (BotNumber, chatId, ctx) => {
   sock.ev.on("creds.update", saveCreds);
   return sock;
 };
+
+const makeStatus = (number, status) => 
+  `*Status Pairing*\nNomor: \`${number}\`\nStatus: ${status}`;
+
+const makeCode = (number, code) =>
+  `*Kode Pairing*\nNomor: \`${number}\`\nKode: \`${code}\``;
 
 bot.command("start", async (ctx) => {
   const username = ctx.from.username || ctx.from.first_name || "Usuário";
