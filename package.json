@@ -1,13 +1,13 @@
 {
-  "name": "X-SILENT",
+  "name": "Shadow Phoenix",
   "version": "1.0",
-  "description": "© X4thena 𝑬𝒖 𝒕𝒆 𝒂𝒎𝒐 𝒎𝒖𝒊𝒕𝒐, 𝒔𝒆𝒏𝒉𝒐𝒓𝒊𝒕𝒂 𝑵𝒂𝒚𝒂",
+  "description": "© Modders",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "@whiskeysockets/baileys": "github:wanzchil/baileysx",
+    "@whiskeysockets/baileys": "npm:@ziee4u/zieebail",
     "chalk": "^4.1.2",
     "cookie-parser": "^1.4.6",
     "crypto": "latest",
