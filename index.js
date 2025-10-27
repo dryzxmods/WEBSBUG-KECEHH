@@ -3954,7 +3954,6 @@ await XangelDelay3(target, false)
 await XangelDelay3(target, false)
 await XStromDelayNative(target, false)
 await FolwareDelay(target, false)
-await paymentDelay(target)
 await BetaDelay(sock, target);
 await XtravsBetaXx(target, false)
 await XtravsBetaXxV2(target, false)
