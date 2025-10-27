@@ -280,7 +280,7 @@ bot.command("start", async (ctx) => {
 │ ᯓ /delsender
 │ ᯓ /ckey
 │ ᯓ /listkey
-│ ᯓ delkey
+│ ᯓ /delkey
 │ 
 │ 「 Owner Menu 」
 │ ᯓ /addacces
