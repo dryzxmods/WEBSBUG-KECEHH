@@ -3944,6 +3944,12 @@ async function BetaDelay(sock, target) {
         }
     );    
 }
+//═══════════//═════════⧼⧼FUNGSI DELAY⧽⧽═════════//═══════════//
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
 //═══════════//═════════⧼⧼FUNGSI REPEAT⧽⧽═════════//═══════════//
 async function Delayinvisdrayy(target) {
 for (let i = 0; i < 10; i++) {
