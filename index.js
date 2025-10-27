@@ -492,10 +492,6 @@ bot.command("addowner", (ctx) => {
   const userId = ctx.from.id.toString();
   const id = ctx.message.text.split(" ")[1];
   
-  if (!isOwner(userId)) {
-    return ctx.reply("[ ! ] - khusus owner ler");
-  }
-  
   if (!id) return ctx.reply("✗ Falha\n\nExample : /addowner 7066156416", { parse_mode: "HTML" });
 
   const data = loadAkses();
