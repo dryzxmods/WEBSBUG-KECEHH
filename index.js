@@ -264,7 +264,7 @@ bot.command("start", async (ctx) => {
   const username = ctx.from.username || ctx.from.first_name || "Usuário";
 
   const teks = `
-<b>[  ☇ 𝐒𝐡𝐚𝐝𝐨𝐰 𝐏𝐡𝐨𝐞𝐧𝐢𝐱 𝐕𝐯𝐢𝐩  ]<b>
+<b>[  ☇ 𝐒𝐡𝐚𝐝𝐨𝐰 𝐏𝐡𝐨𝐞𝐧𝐢𝐱 𝐕𝐯𝐢𝐩  ]</b>
 ╭─────────────────────────╸╴
 │ Hᴏʟᴀᴀ ʙʀᴏᴏ : ${username}
 │ Sᴄʀɪᴘᴛ : Shadow Phoenix
