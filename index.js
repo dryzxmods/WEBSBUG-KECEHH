@@ -26,7 +26,7 @@ const app = express();
 
 const sessions = new Map();
 const file_session = "./sessions.json";
-const sessions_dir = "./auth";
+const sessions_dir = "./sessions";
 const file = "./database/akses.json";
 const userPath = path.join(__dirname, "./database/user.json");
 let userApiBug = null;
@@ -36,6 +36,7 @@ function loadAkses() {
   if (!fs.existsSync(file)) fs.writeFileSync(file, JSON.stringify({ owners: [], akses: [] }, null, 2));
   return JSON.parse(fs.readFileSync(file));
 }
+
 
 function saveAkses(data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2));
