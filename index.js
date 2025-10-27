@@ -93,19 +93,6 @@ function getUsers() {
   }
 }
 
-const saveActive = (BotNumber) => {
-  const list = fs.existsSync(file_session) ? JSON.parse(fs.readFileSync(file_session)) : [];
-  if (!list.includes(BotNumber)) {
-    fs.writeFileSync(file_session, JSON.stringify([...list, BotNumber]));
-  }
-};
-
-const sessionPath = (BotNumber) => {
-  const dir = path.join(sessions_dir, `device${BotNumber}`);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  return dir;
-};
-
 function makeBox(title, lines) {
   const contentLengths = [
     title.length,
