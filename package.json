@@ -1,0 +1,21 @@
+{
+  "name": "X-SILENT",
+  "version": "1.0",
+  "description": "© X4thena 𝑬𝒖 𝒕𝒆 𝒂𝒎𝒐 𝒎𝒖𝒊𝒕𝒐, 𝒔𝒆𝒏𝒉𝒐𝒓𝒊𝒕𝒂 𝑵𝒂𝒚𝒂",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "github:wanzchil/baileysx",
+    "chalk": "^4.1.2",
+    "cookie-parser": "^1.4.6",
+    "crypto": "latest",
+    "express": "^4.18.2",
+    "fs": "latest",
+    "grammy": "^1.38.2",
+    "moment-timezone": "latest",
+    "pino": "^9.5.0",
+    "telegraf": "^4.16.3"
+  }
+}
