@@ -28,7 +28,21 @@
       overflow: hidden;
       position: relative;
     }
-
+    
+    
+    .video-brand { 
+  width: 100%;
+  max-width: 420px;
+  border-radius: 15px; 
+  border: 2px solid var(--glass-border); 
+  box-shadow: 0 0 20px rgba(138, 99, 210, 0.3); 
+  display: block; 
+  margin: 0 auto 16px; 
+  height: auto;
+  aspect-ratio: 16/9;
+  transition: all 0.3s ease;
+}
+    
     .card {
       background: rgba(0, 0, 0, 0.7);
       border: 1px solid rgba(138, 3, 3, 0.5);
@@ -203,7 +217,9 @@
 
 <body>
   <div class="card">
-    <div class="profile"><img src="https://files.catbox.moe/z7xdq5.png"></div>
+    <video autoplay muted loop class="video-brand">
+          <source src="https://files.catbox.moe/sxmhgw.mp4" type="video/mp4">
+        </video>
     <div class="title">S-P VVIP</div>
     <div class="subtitle">© 2025 Modders. All rights reserved.</div>
 
@@ -223,7 +239,7 @@
       </button>
     </form>
 
-    <a class="buy-access" href="https://t.me/DryzxModders" target="_blank">
+    <a class="buy-access" href="https://t.me/shadowapknew" target="_blank">
       <i class="fas fa-coins"></i> Buy Key Access
     </a>
   </div>
